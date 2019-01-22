@@ -3,6 +3,7 @@ $uploaddir = 'files/';
 if (!file_exists("$uploaddir")) {
 	mkdir("$uploaddir", 0700);
 	header("Location:admin.php");
+	exit;
 }
 
 if (!empty($_FILES['userfile'])) {
