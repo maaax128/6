@@ -7,20 +7,16 @@
 <?php
     exit;
 } 
-
 if (isset($_GET['test'])) {
-   
+   session_start();
    $hungle = file_get_contents($_GET['test']);
    $content = json_decode($hungle, true);
    $head = $content[0]['question'];
    $block[] = $content[0]['items'];
-
-
 } else {
   http_response_code(404);
   echo '<h3>Тест не выбран</h3>';
 }
-
 ?>
 
 
@@ -30,31 +26,7 @@ if (isset($_GET['test'])) {
 <head>
     <meta charset="utf-8">
     <title>Генератор тестов на PHP и JSON</title>
-    <style>
-      .img {
-        width: 400px;
-        position : relative;
-       }
-       .img h2 { 
-        display: block;
-        position: absolute; 
-        text-align: center;
-        top: 20%; 
-        left: 0;
-        right: 0;
-        margin: auto;
-       }
-       .img p { 
-        position: absolute;
-        text-align: center;
-        left: 0;
-        right: 0;
-        margin: auto;
-        line-height: 1.5;
-        top: 40%; 
-       }
 
-    </style>
 </head>
 <body>
 
@@ -83,8 +55,6 @@ if (isset($head)) {
     <input class="add" type="submit" name="add" value="Отправить">
   </form> <?php
   }
-
-
 if (!empty($_POST['add'])) {
     foreach ($content[0]['items'] as $key => $value) {   
           for ($i = 0; $i < count($_POST); $i++) {          
@@ -93,32 +63,24 @@ if (!empty($_POST['add'])) {
                   if (isset($_POST[$i]) && $_POST[$i] === $content[0]['items'][$i]['answers'][$k]['answer']) {
                         $results[] = $content[0]['items'][$i]['answers'][$k]['result'];
                        // var_dump($results);
-
                     }
                 }
             }
         }
     }
 }
-
      else {
       echo 'Вы не ответили на вопросы';
      }
-if (!empty($results)) {
-  
-
+if (!empty($results)) { 
 $result = array_sum($results);
 $correct = array_sum($correct);
-$name = $_POST['name'];
+$_SESSION['name'] = $_POST['name'];
 if ($result === $correct) {
-?>
-      <div class="img">
-      <img src="sert2.php">
-      <h2><?=$name?></h2>
-                        
-                        
-      <p>Вы правильно ответили на все вопросы этого теста!!!</p>
-    </div>
+?>      
+      <img src="sert2.php">                                 
+
+
 <?php
 } else {
 ?>
